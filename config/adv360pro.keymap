@@ -1,48 +1,146 @@
 #include <behaviors.dtsi>
+
+#include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/backlight.h>
-
+/* Custom Defined Behaviors */
 / {
-    keymap {
+    // NOTE: Use the `#define` settings below to customize this keymap!
+    // For example, here are the main optional features you can enable:
+    #define DIFFICULTY_LEVEL  5 // 1:easy --> 5:hard (see levels below)
+    #define ENFORCE_BILATERAL   // cancels single-handed home row mod+tap
+    //#define ENABLE_KEY_REPEAT // permits "tap then hold" key repetition
+
+    //////////////////////////////////////////////////////////////////////////////
+    //
+    // Sunaku's Keymap v34 -- "Glorious Engrammer"
+    // - https://github.com/sunaku/glove80-keymaps
+    //
+    //////////////////////////////////////////////////////////////////////////////
+
+    //
+    // DIFFICULTY_LEVEL specifies your level of expertise with this keymap.
+    // It's meant to help newcomers gradually work their way up to mastery.
+    // You can disable this setting by omitting it or assigning a `0` zero.
+    //
+    // #define DIFFICULTY_LEVEL 0 // custom (no preset settings)
+    // #define DIFFICULTY_LEVEL 1 // novice (500ms)
+    // #define DIFFICULTY_LEVEL 2 // slower (400ms)
+    // #define DIFFICULTY_LEVEL 3 // normal (300ms)
+    // #define DIFFICULTY_LEVEL 4 // faster (200ms)
+    // #define DIFFICULTY_LEVEL 5 // sunaku (see defaults below)
+    //
+    #ifdef DIFFICULTY_LEVEL
+    #if DIFFICULTY_LEVEL == 1
+        #define CAPPY_HOLDING_TIME 500
+        #define HOMEY_HOLDING_TIME 500
+        #define INDEX_HOLDING_TIME 500
+        #define PLAIN_HOLDING_TIME 500
+        #define SPACE_HOLDING_TIME 500
+    #elif DIFFICULTY_LEVEL == 2
+        #define CAPPY_HOLDING_TIME 400
+        #define HOMEY_HOLDING_TIME 400
+        #define INDEX_HOLDING_TIME 400
+        #define PLAIN_HOLDING_TIME 400
+        #define SPACE_HOLDING_TIME 400
+    #elif DIFFICULTY_LEVEL == 3
+        #define CAPPY_HOLDING_TIME 300
+        #define HOMEY_HOLDING_TIME 300
+        #define INDEX_HOLDING_TIME 300
+        #define PLAIN_HOLDING_TIME 300
+        #define SPACE_HOLDING_TIME 300
+    #elif DIFFICULTY_LEVEL == 4
+        #define CAPPY_HOLDING_TIME 200
+        #define HOMEY_HOLDING_TIME 200
+        #define INDEX_HOLDING_TIME 200
+        #define PLAIN_HOLDING_TIME 200
+        #define SPACE_HOLDING_TIME 200
+    #endif
+    #endif
+    //
+    // OPERATING_SYSTEM defines which operating system you intend to use
+    // with this keymap, because shortcuts vary across operating systems.
+    //
+    // - https://zmk.dev/docs/codes
+    // - https://en.wikipedia.org/wiki/Table_of_keyboard_shortcuts
+    //
+    #ifndef OPERATING_SYSTEM
+    #define OPERATING_SYSTEM 1 // linux
+    //#define OPERATING_SYSTEM 2 // macos
+    //#define OPERATING_SYSTEM 3 // windows
+    #endif
+    #if OPERATING_SYSTEM == 2
+        #define _C      LG
+        #define _REDO   _C(LS(Z))
+        #define _POWER  K_POWER
+        #define _W      LA
+        #define _HOME   _C(LEFT)
+        #define _END    _C(RIGHT)
+    #else
+        #define _C      LC
+        #define _REDO   _C(Y)
+        #define _POWER  C_POWER
+        #define _W      _C
+        #define _HOME   HOME
+        #define _END    END
+    #endif
+    #define _SLEEP      C_SLEEP
+    #if OPERATING_SYSTEM == 3
+        #define _LOCK   LG(L)
+    #elif OPERATING_SYSTEM == 2
+        #define _LOCK   _C(LC(Q))
+    #elif OPERATING_SYSTEM == 1
+        #define _LOCK   K_LOCK
+    #endif
+    #define _UNDO       _C(Z)
+    #define _CUT        _C(X)
+    #define _COPY       _C(C)
+    #define _PASTE      _C(V)
+    #define _FIND       _C(F)
+    #define _FIND_NEXT  _C(G)
+    #define _FIND_PREV  _C(LS(G))
+
+        keymap {
         compatible = "zmk,keymap";
 
         default_layer {
             bindings = <
-                &kp EQUAL &kp N1    &kp N2   &kp N3   &kp N4     &kp N5 &tog 1                                                           &mo 3 &kp N6 &kp N7 &kp N8    &kp N9   &kp N0   &kp MINUS
-                &kp TAB   &kp Q     &kp W    &kp E    &kp R      &kp T  &none                                                            &none &kp Y  &kp U  &kp I     &kp O    &kp P    &kp BSLH
-                &kp ESC   &kp A     &kp S    &kp D    &kp F      &kp G  &none           &kp LCTRL &kp LALT &kp LGUI  &kp RCTRL           &none &kp H  &kp J  &kp K     &kp L    &kp SEMI &kp SQT
-                &kp LSHFT &kp Z     &kp X    &kp C    &kp V      &kp B                            &kp HOME &kp PG_UP                           &kp N  &kp M  &kp COMMA &kp DOT  &kp FSLH &kp RSHFT
-                &mo 2     &kp GRAVE &kp CAPS &kp LEFT &kp RIGHT                &kp BSPC &kp DEL   &kp END  &kp PG_DN &kp ENTER &kp SPACE              &kp UP &kp DOWN  &kp LBKT &kp RBKT &mo 2
+                &kp EQUAL &kp N1    &kp N2   &kp N3   &kp N4     &kp N5 &tog 1                                                                                        &mo 3 &kp N6 &kp N7 &kp N8    &kp N9   &kp N0   &kp MINUS
+                &kp TAB   &kp Q     &kp W    &kp E    &kp R      &kp T  &none                                                                                         &none &kp Y  &kp U  &kp I     &kp O    &kp P    &kp BSLH
+        &cappy CAPSLOCK 0 &kp A     &kp S    &kp D    &kp F      &kp G  &none                                &kp LCTRL           &kp LALT &kp RALT &kp RCTRL          &none &kp H  &kp J  &kp K     &kp L    &kp SEMI &kp SQT
+                &kp LSHFT &kp Z     &kp X    &kp C    &kp V      &kp B                                                           &kp LALT &kp PG_UP                         &kp N  &kp M  &kp COMMA &kp DOT  &kp FSLH &kp RSHFT
+                &mo 2     &kp GRAVE &kp CAPS &kp LEFT &kp RIGHT                         &thumb mod BACKSPACE &thumb keypad ESC   &kp LGUI &kp RGUI &kp ENTER &thumb mod SPACE      &kp UP &kp DOWN  &kp LBKT &kp RBKT &mo 2
             >;
         };
         keypad {
             bindings = <
-                &kp EQUAL &kp N1    &kp N2   &kp N3   &kp N4     &kp N5 &trans                                                           &mo 3 &kp N6 &kp KP_NUM &kp KP_EQUAL &kp KP_DIVIDE &kp KP_MULTIPLY &kp MINUS
-                &kp TAB   &kp Q     &kp W    &kp E    &kp R      &kp T  &none                                                            &none &kp Y  &kp KP_N7  &kp KP_N8    &kp KP_N9     &kp KP_MINUS    &kp BSLH
-                &kp ESC   &kp A     &kp S    &kp D    &kp F      &kp G  &none           &kp LCTRL &kp LALT &kp LGUI  &kp RCTRL           &none &kp H  &kp KP_N4  &kp KP_N5    &kp KP_N6     &kp KP_PLUS     &kp SQT
-                &kp LSHFT &kp Z     &kp X    &kp C    &kp V      &kp B                            &kp HOME &kp PG_UP                           &kp N  &kp KP_N1  &kp KP_N2    &kp KP_N3     &kp KP_ENTER    &kp RSHFT
-                &mo 2     &kp GRAVE &kp CAPS &kp LEFT &kp RIGHT                &kp BSPC &kp DEL   &kp END  &kp PG_DN &kp ENTER &kp KP_N0              &kp UP     &kp DOWN     &kp KP_DOT    &kp RBKT        &mo 2
-            >;
-        };
-        fn {
-            bindings = <
-                &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6 &tog 1                                           &mo 3 &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12
-                &trans &trans &trans &trans &trans &trans  &none                                           &none &trans &trans &trans &trans  &trans  &trans
-                &trans &trans &trans &trans &trans &trans  &none        &trans &trans &trans &trans        &none &trans &trans &trans &trans  &trans  &trans
-                &trans &trans &trans &trans &trans &trans                      &trans &trans                     &trans &trans &trans &trans  &trans  &trans
-                &trans &trans &trans &trans &trans               &trans &trans &trans &trans &trans &trans              &trans &trans &trans  &trans  &trans
+                &kp EQUAL &kp N1    &kp N2   &kp N3   &kp N4     &kp N5 &tog 1                                                                                         &mo 3 &kp CARET  &kp HASH  &kp DLLR  &kp TILDE     &kp EXCL        &kp PIPE
+                &kp TAB   &kp Q     &kp W    &kp E    &kp R      &kp T  &none                                                                                          &none &kp PRCNT  &kp N7    &kp N8    &kp N9        &kp COLON       &kp K
+        &cappy CAPSLOCK 0 &kp A     &kp S    &kp D    &kp F      &kp G  &none                               &kp LCTRL           &kp LALT &kp RALT &kp RCTRL            &none &kp PLUS   &kp N4    &kp N5    &kp N6        &kp MINUS       &kp J
+                &kp LSHFT &kp Z     &kp X    &kp C    &kp V      &kp B                                                          &kp LALT &kp PG_UP                           &kp STAR   &kp N1    &kp N2    &kp N3        &kp FSLH        &kp LS(G)
+                &mo 2     &kp GRAVE &kp CAPS &kp LEFT &kp RIGHT                         &thumb mod BACKSPACE &thumb keypad ESC  &kp LGUI &kp RGUI &kp ENTER &thumb mod SPACE            &trans    &kp N0    &trans        &trans          &mo 2
             >;
         };
         mod {
             bindings = <
-                &none &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4 &none                                                               &trans      &none &none      &none      &none &none &none
-                &none &none        &none        &none        &none        &none        &bootloader                                                         &bootloader &none &none      &none      &none &none &none
-                &none &none        &none        &none        &none        &none        &none             &none &none &bt BT_CLR &none                      &none       &none &none      &none      &none &none &none
-                &none &none        &none        &none        &none        &none                                &none &none                                             &none &none      &none      &none &none &none
-                &none &none        &none        &none        &none                                 &none &none &none &none      &bl BL_TOG &rgb_ug RGB_TOG                   &bl BL_INC &bl BL_DEC &none &none &none
+                &kp PLUS  &kp GRAVE &kp LPAR &kp RPAR &kp SEMI   &kp COMMA &tog 1                                                                                       &mo 3 &kp INS    &kp DEL   &none     &none         &none           &none
+                &kp EXCL  &kp LBRC  &kp SQT  &kp DQT  &kp RBRC   &kp QMARK &none                                                                                        &none &kp _CUT   &kp BSPC  &kp _UNDO &kp _REDO     &sk LSHFT       &kp _C(K)
+                &kp HASH  &kp CARET &kp EQUAL &kp UNDER &kp DLLR &kp STAR &none                              &kp LCTRL          &kp LALT &kp RALT &kp RCTRL             &none &kp _COPY  &kp LEFT  &kp UP    &kp DOWN      &kp RIGHT       &kp _C(L)
+                &kp TILDE &kp LT    &kp PIPE &kp MINUS &kp GT    &kp FSLH                                                       &kp LALT &kp PG_UP                            &kp _PASTE &kp HOME  &kp PG_UP &kp PG_DN     &kp END         &kp _C(J)
+                &mo 2     &kp AT    &kp AMPS &kp LBKT  &kp RBKT                         &thumb mod BACKSPACE &thumb keypad ESC  &kp LGUI &kp RGUI &kp ENTER &thumb mod SPACE             &kp _FIND &kp _FIND_PREV &kp _FIND_NEXT &kp _C(H) &mo 2
+            >;
+        };      
+        fn {
+            bindings = <
+                &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6 &tog 1                                                                                                        &mo 3 &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12
+                &trans &trans &trans &trans &trans &trans  &none                                                                                                        &none &trans &trans &trans &trans  &trans  &trans
+                &trans &trans &trans &trans &trans &trans  &none                                              &kp LCTRL          &kp LALT &kp RALT &kp RCTRL            &none &trans &trans &trans &trans  &trans  &trans
+                &trans &trans &trans &trans &trans &trans                                                                        &kp LALT &kp PG_UP                           &trans &trans &trans &trans  &trans  &trans
+                &trans &trans &trans &trans &trans                                      &thumb mod BACKSPACE  &thumb keypad ESC  &kp LGUI &kp RGUI &kp ENTER &thumb mod SPACE        &trans &trans &trans  &trans  &trans
             >;
         };
+
     };
 };
