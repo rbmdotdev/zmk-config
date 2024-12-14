@@ -102,7 +102,32 @@
     #define _FIND_NEXT  _C(G)
     #define _FIND_PREV  _C(LS(G))
 
-        keymap {
+    //////////////////////////////////////////////////////////////////////////
+    //
+    // Custom hold-taps
+    //
+    //////////////////////////////////////////////////////////////////////////
+
+    //
+    // CAPPY_HOLDING_TIME defines how long you need to hold (milliseconds)
+    // cappy to type CapsLock.  Shorter holds are taps that type CapsWord.
+    //
+    #ifndef CAPPY_HOLDING_TIME
+    #define CAPPY_HOLDING_TIME 200
+    #endif
+
+    //
+    // Tap = CapsWord; Hold = CapsLock
+    //
+    cappy: capsword_and_capslock {
+        compatible = "zmk,behavior-hold-tap";
+        flavor = "tap-preferred";
+        tapping-term-ms = <CAPPY_HOLDING_TIME>;
+        #binding-cells = <2>;
+        bindings = <&kp>, <&caps_word>;
+    };
+
+    keymap {
         compatible = "zmk,keymap";
 
         default_layer {
