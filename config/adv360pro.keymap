@@ -102,6 +102,20 @@
     #define _FIND_NEXT  _C(G)
     #define _FIND_PREV  _C(LS(G))
 
+    //
+    // Thumb cluster hold-tap keys for Miryoku layers
+    //
+    thumb: thumb_layer_access {
+        compatible = "zmk,behavior-hold-tap";
+        flavor = THUMB_HOLDING_TYPE;
+        tapping-term-ms = <THUMB_HOLDING_TIME>;
+        #ifdef ENABLE_KEY_REPEAT
+        quick-tap-ms = <THUMB_REPEAT_DECAY>; // enable repeat
+        #endif
+        #binding-cells = <2>;
+        bindings = <&mo>, <&kp>;
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
