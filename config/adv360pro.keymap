@@ -120,7 +120,7 @@
     // Tap = CapsWord; Hold = CapsLock
     //
     cappy: capsword_and_capslock {
-        compatible = "zmk,behavior-hold-tap";
+        compatible = "zmk,keymap";
         flavor = "tap-preferred";
         tapping-term-ms = <CAPPY_HOLDING_TIME>;
         #binding-cells = <2>;
